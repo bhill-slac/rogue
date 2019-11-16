@@ -165,6 +165,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
         if self._running:
             raise pr.NodeError("Root is already started! Can't restart!")
 
+        print("start: Starting Root ...")
 
         # Call special root level rootAttached
         self._rootAttached()
@@ -205,6 +206,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
                     #                   tmpList[i].name,tmpList[i].address,
                     #                   tmpList[i-1].name,tmpList[i-1].address,tmpList[i-1].size))
 
+        print("start: setTimeout %f" % timeout)
         # Set timeout if not default
         if timeout != 1.0:
             for key,value in self._nodes.items():
@@ -212,9 +214,11 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
 
         # Start ZMQ server if enabled
         if zmqPort is not None:
-            print("Starting zmqServer on port %d" % zmqPort)
+            print("start: Starting zmqServer on port %d" % zmqPort)
             self._structure = jsonpickle.encode(self)
             self._zmqServer = pr.interfaces.ZmqServer(root=self,addr="*",port=zmqPort)
+        else:
+            print("start: zmqServer not used.")
 
         # Read current state
         if initRead:
