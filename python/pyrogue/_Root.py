@@ -211,6 +211,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
 
         # Start ZMQ server if enabled
         if zmqPort is not None:
+            print("Starting zmqServer on port %d" % zmqPort)
             self._structure = jsonpickle.encode(self)
             self._zmqServer = pr.interfaces.ZmqServer(root=self,addr="*",port=zmqPort)
 
