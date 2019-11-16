@@ -104,22 +104,25 @@ rpe::Variable::Variable (std::string epicsName, bp::object p, bool syncRead) : V
    }
 
    // Init value
-   if ( isString_ ) fromPython(var_.attr("valueDisp")());
+   if (  isString_ || epicsType_ == aitEnumEnum16 ) fromPython(var_.attr("valueDisp")());
    else fromPython(var_.attr("value")());
 }
 
 rpe::Variable::~Variable() { }
 
-void rpe::Variable::varUpdated(std::string path, bp::object value, bp::object disp) {
+void rpe::Variable::varUpdated(std::string path, bp::object value) {
    rogue::GilRelease noGil;
+   bp::object convValue;
 
-   log_->debug("Variable update for %s: Disp=%s", epicsName_.c_str(),(char *)bp::extract<char *>(disp));
+   log_->debug("Variable update for %s", epicsName_.c_str());
    {
       std::lock_guard<std::mutex> lock(mtx_);
       noGil.acquire();
+  
+      if (  isString_ || epicsType_ == aitEnumEnum16 ) convValue = value.attr("valueDisp");
+      else convValue = value.attr("value");
 
-      if (  isString_ ) fromPython(disp);
-      else fromPython(value);
+      fromPython(convValue);
    }
    noGil.release();
    this->updated();
@@ -132,7 +135,7 @@ void rpe::Variable::valueGet() {
          rogue::ScopedGil gil;
          log_->info("Synchronous read for %s",epicsName_.c_str());
          try {
-            if ( isString_ ) fromPython(var_.attr("getDisp")());
+            if (  isString_ || epicsType_ == aitEnumEnum16 ) fromPython(var_.attr("getDisp")());
             else fromPython(var_.attr("get")());
          } catch (...) {
             log_->error("Error getting values from epics: %s\n",epicsName_.c_str());
@@ -247,11 +250,11 @@ void rpe::Variable::fromPython(bp::object value) {
          std::string val;
          uint8_t idx;
 
-         bp::extract<char *> enumChar(value);
-         bp::extract<bool>   enumBool(value);
+         bp::extract<std::string> enumStr(value);
+         bp::extract<bool>        enumBool(value);
 
          // Enum is a string
-         if ( enumChar.check() ) idx = revEnum(std::string(enumChar));
+         if ( enumStr.check() ) idx = revEnum(enumStr);
 
          // Enum is a bool
          else if ( enumBool.check() ) idx = (enumBool)?1:0;
@@ -374,7 +377,6 @@ void rpe::Variable::valueSet() {
             uint8_t idx;
 
             pValue_->getConvert(idx);
-
             if ( idx < enums_.size() ) var_.attr(setAttr_.c_str())(enums_[idx]);
          }
       }
