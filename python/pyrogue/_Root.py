@@ -326,6 +326,8 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
             if 'sqlUrl'          in kwargs:
                 self._sqlUrl          = kwargs['sqlUrl']
 
+        print("start: Starting Root ...")
+
         # Call special root level rootAttached
         self._rootAttached()
 
@@ -360,6 +362,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
                                        tmpList[i].path,tmpList[i].address,
                                        tmpList[i-1].path,tmpList[i-1].address,tmpList[i-1].size))
 
+        print("start: setTimeout %f" % self._timeout)
         # Set timeout if not default
         if self._timeout != 1.0:
             for key,value in self._nodes.items():
@@ -370,6 +373,8 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
             self._zmqServer  = pr.interfaces.ZmqServer(root=self,addr="*",port=self._serverPort)
             self._serverPort = self._zmqServer.port()
             print("start: Started zmqServer on port %d" % self._serverPort)
+        else:
+            print("start: zmqServer not used.")
 
         # Start sql interface
         if self._sqlUrl is not None:
