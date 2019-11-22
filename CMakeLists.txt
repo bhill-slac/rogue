@@ -144,8 +144,8 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
                                ${EPICSV3_BASE_DIR}/include/compiler/gcc 
                                ${EPICSV3_BASE_DIR}/include/os/Darwin)
 
-         set(EPICSV3_LIBRARIES ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH}/libcas.dylib 
-                               ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH}/libgdd.dylib
+         set(EPICSV3_LIBRARIES ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libcas.dylib 
+                               ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libgdd.dylib
                                ${EPICSV3_LIB_DIR}/libca.dylib 
                                ${EPICSV3_LIB_DIR}/libCom.dylib )
       else()
@@ -166,8 +166,8 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
                                ${EPICSV3_BASE_DIR}/include/compiler/gcc 
                                ${EPICSV3_BASE_DIR}/include/os/Linux)
 
-         set(EPICSV3_LIBRARIES ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH}/libcas.so 
-                               ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH}/libgdd.so
+         set(EPICSV3_LIBRARIES ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libcas.so 
+                               ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libgdd.so
                                ${EPICSV3_LIB_DIR}/libca.so 
                                ${EPICSV3_LIB_DIR}/libCom.so )
       else()
