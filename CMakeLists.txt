@@ -147,8 +147,9 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
                                ${EPICSV3_BASE_DIR}/include/compiler/gcc 
                                ${EPICSV3_BASE_DIR}/include/os/Darwin)
 
-         set(PCAS_LIBRARIES    ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libcas.dylib 
-                               ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libgdd.dylib )
+         set(PCAS_LIB_DIR      ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH} )
+         set(PCAS_LIBRARIES    ${PCAS_LIB_DIR}/lib/libcas.dylib 
+                               ${PCAS_LIB_DIR}/lib/libgdd.dylib )
          set(EPICSV3_LIBRARIES ${EPICSV3_LIB_DIR}/libca.dylib 
                                ${EPICSV3_LIB_DIR}/libCom.dylib )
       else()
@@ -169,12 +170,13 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
                                ${EPICSV3_BASE_DIR}/include/compiler/gcc 
                                ${EPICSV3_BASE_DIR}/include/os/Linux)
 
-         set(PCAS_LIBRARIES    ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libcas.so 
-                               ${EPICS_PCAS_ROOT}/lib/$ENV{EPICS_HOST_ARCH}/libgdd.so )
+         set(PCAS_LIB_DIR      ${EPICS_PCAS_ROOT}/lib/${EPICSV3_ARCH} )
+         set(PCAS_LIBRARIES    ${PCAS_LIB_DIR}/lib/libcas.so 
+                               ${PCAS_LIB_DIR}/lib/libgdd.so )
          set(EPICSV3_LIBRARIES ${EPICSV3_LIB_DIR}/libca.so 
                                ${EPICSV3_LIB_DIR}/libCom.so )
-		 message( -- PCAS_LIBRARIES=${PCAS_LIBRARIES} )
-		 message( -- EPICSV3_LIBRARIES=${PCAS_LIBRARIES} )
+		 message( -- "PCAS_LIBRARIES=${PCAS_LIBRARIES}" )
+		 message( -- "EPICSV3_LIBRARIES=${EPICSV3_LIBRARIES}" )
       else()
          set(EPICSV3_INCLUDES  ${EPICSV3_BASE_DIR}/include
                                ${EPICSV3_BASE_DIR}/include/compiler/gcc 
@@ -184,7 +186,7 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
                                ${EPICSV3_LIB_DIR}/libca.so
                                ${EPICSV3_LIB_DIR}/libCom.so
                                ${EPICSV3_LIB_DIR}/libgdd.so )
-		 message( -- EPICSV3_LIBRARIES=${PCAS_LIBRARIES} )
+		 message( -- "EPICSV3_LIBRARIES=${EPICSV3_LIBRARIES}" )
       endif()
    endif()
 else()
@@ -276,6 +278,7 @@ add_subdirectory(src/rogue)
 TARGET_LINK_LIBRARIES(rogue-core LINK_PUBLIC ${Boost_LIBRARIES})
 TARGET_LINK_LIBRARIES(rogue-core LINK_PUBLIC ${ZeroMQ_LIBRARY})
 if (EPICS_PCAS_ROOT)
+message( -- "TARGET_LINK_LIBRARIES adding PCAS_LIBRARIES=${PCAS_LIBRARIES}" )
 TARGET_LINK_LIBRARIES(rogue-core LINK_PUBLIC ${PCAS_LIBRARIES})
 endif()
 TARGET_LINK_LIBRARIES(rogue-core LINK_PUBLIC ${EPICSV3_LIBRARIES})
