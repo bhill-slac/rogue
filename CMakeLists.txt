@@ -175,6 +175,9 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
    endif()
 
    # PCAS is part of epics before version 4
+#   if(DEFINED ENV{EPICS_PCAS_ROOT})
+#       set(EPICS_PCAS_ROOT $ENV{EPICS_PCAS_ROOT})
+#   endif()
    if(EPICS_PCAS_ROOT)
       set(EPICS_PCAS_DIR ${EPICS_PCAS_ROOT})
    elseif(DEFINED ENV{EPICS_PCAS_ROOT})
@@ -302,6 +305,7 @@ add_library(rogue-core-shared SHARED $<TARGET_OBJECTS:rogue-core> "")
 set_target_properties(rogue-core-shared PROPERTIES OUTPUT_NAME librogue-core)
 set_target_properties(rogue-core-shared PROPERTIES PREFIX "" SUFFIX ".so")
 set_target_properties(rogue-core-shared PROPERTIES VERSION ${ROGUE_VERSION} SOVERSION ${ROGUE_SOVER})
+#set_target_properties(rogue-core-shared PROPERTIES CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 TARGET_LINK_LIBRARIES(rogue-core-shared PUBLIC ${Boost_LIBRARIES})
 TARGET_LINK_LIBRARIES(rogue-core-shared PUBLIC ${ZeroMQ_LIBRARY})
@@ -320,6 +324,7 @@ if(STATIC_LIB)
     add_library(rogue-core-static STATIC $<TARGET_OBJECTS:rogue-core> "")
     set_target_properties(rogue-core-static PROPERTIES OUTPUT_NAME librogue-core)
     set_target_properties(rogue-core-static PROPERTIES PREFIX "" SUFFIX ".a")
+    set_target_properties(rogue-core-static PROPERTIES INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so)
 
     # Link rogue core to boost, python and bzip
     TARGET_LINK_LIBRARIES(rogue-core-static PUBLIC ${Boost_LIBRARIES})
@@ -330,6 +335,10 @@ if(STATIC_LIB)
     TARGET_LINK_LIBRARIES(rogue-core-static PUBLIC rt)
 endif()
 
+#set(CMAKE_NO_BUILTIN_CHRPATH TRUE)
+#set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so )
 
 #####################################
 # Setup build, python library
