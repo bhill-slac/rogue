@@ -128,6 +128,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
                  sqlExcGroups=['NoSql']):
         """Init the node with passed attributes"""
         rogue.interfaces.stream.Master.__init__(self)
+        print("Creating Root w/ pollEn=%s and serverPort=%s ..." % (pollEn, serverPort))
 
         # Store startup parameters
         self._timeout         = timeout
@@ -336,7 +337,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
             if 'sqlUrl'          in kwargs:
                 self._sqlUrl          = kwargs['sqlUrl']
 
-        print("start: Starting Root ...")
+        print("start: Starting Root w/ pollEn=%s and serverPort=%s ..." % (self._pollEn, self._serverPort))
 
         # Call special root level rootAttached
         self._rootAttached()
@@ -958,6 +959,7 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
 
                 for p,v in uvars.items():
                     try:
+                        self._log.debug(F"doUpdate {p}")
                         val = v._doUpdate()
 
                         # Add to stream
