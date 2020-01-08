@@ -224,3 +224,4 @@ class LocalBlock(object):
             self.set(None, self.get(None) | other)
             if self._enable:
                 self._variable._queueUpdate()
+
