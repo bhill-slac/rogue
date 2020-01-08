@@ -339,6 +339,7 @@ class BaseVariable(pr.Node):
         Hardware read is blocking. An error will result in a logged exception.
         Listeners will be informed of the update.
         """
+        self._log.debug("{}.get()".format(self))
         return None
 
     @pr.expose
@@ -464,6 +465,7 @@ class BaseVariable(pr.Node):
     def _doUpdate(self):
         val = VariableValue(self)
 
+        self._log.debug("doUpdate variable '{}' with type {}.".format(self.path,self.typeStr))
         for func in self.__functions:
             func(self.path,val)
 
