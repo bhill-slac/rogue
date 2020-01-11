@@ -339,6 +339,7 @@ endif()
 #set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so )
+#set_target_properties(rogue-core PROPERTIES INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so)
 
 #####################################
 # Setup build, python library
