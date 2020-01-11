@@ -139,7 +139,8 @@ void rh::MemMap::runThread() {
             count += 4;
          }
 
-         log_->debug("Transaction id=0x%08x, addr 0x%08x. Size=%i, type=%i",tran->id(),tran->address(),tran->size(),tran->type());
+         log_->log(rogue::Logging::Debug+1,"Transaction id=0x%08x, addr 0x%08x. Size=%i, type=%i",
+									          tran->id(),tran->address(),tran->size(),tran->type());
          tran->done();
       }
    }
