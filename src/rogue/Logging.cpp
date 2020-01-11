@@ -56,7 +56,7 @@ std::vector <rogue::LogFilter *> rogue::Logging::filters_;
 // Create logger
 rogue::LoggingPtr rogue::Logging::create(std::string name,bool quiet) {
    rogue::LoggingPtr log = std::make_shared<rogue::Logging>(name,quiet);
-   log->info("Created logger for %s with level = %u", name.c_str(), log->level_);
+   log->debug("Created logger for %s with level = %u", name.c_str(), log->level_);
    return log;
 }
 

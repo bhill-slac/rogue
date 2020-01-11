@@ -134,7 +134,8 @@ void rha::AxiMemMap::runThread() {
             it += dataSize;
          }
 
-         log_->debug("Transaction id=0x%08x, addr 0x%08x. Size=%i, type=%i, data=0x%08x",tran->id(),tran->address(),tran->size(),tran->type(),data);
+         log_->log(rogue::Logging::Debug+1,"Transaction id=0x%08x, addr 0x%08x. Size=%i, type=%i, data=0x%08x",
+									          tran->id(),tran->address(),tran->size(),tran->type(),data);
          if ( ret != 0 ) tran->error("Memory transaction failed with error code %i, see driver error codes",ret);
          else tran->done();
       }
