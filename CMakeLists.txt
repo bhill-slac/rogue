@@ -175,9 +175,6 @@ if((NOT NO_PYTHON) AND (NOT NO_EPICS) AND DEFINED ENV{EPICS_BASE})
    endif()
 
    # PCAS is part of epics before version 4
-#   if(DEFINED ENV{EPICS_PCAS_ROOT})
-#       set(EPICS_PCAS_ROOT $ENV{EPICS_PCAS_ROOT})
-#   endif()
    if(EPICS_PCAS_ROOT)
       set(EPICS_PCAS_DIR ${EPICS_PCAS_ROOT})
    elseif(DEFINED ENV{EPICS_PCAS_ROOT})
@@ -300,12 +297,24 @@ add_library(rogue-core OBJECT "")
 # Find rogue core sources
 add_subdirectory(src/rogue)
 
-# Always build shared library
+if ( NOT STATIC_LIB AND NOT SHARED_LIB )
+    set (SHARED_LIB TRUE)
+endif()
+
+if(SHARED_LIB) 
 add_library(rogue-core-shared SHARED $<TARGET_OBJECTS:rogue-core> "")
 set_target_properties(rogue-core-shared PROPERTIES OUTPUT_NAME librogue-core)
 set_target_properties(rogue-core-shared PROPERTIES PREFIX "" SUFFIX ".so")
 set_target_properties(rogue-core-shared PROPERTIES VERSION ${ROGUE_VERSION} SOVERSION ${ROGUE_SOVER})
-#set_target_properties(rogue-core-shared PROPERTIES CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
+
+if(STATIC_LIB) 
+    add_library(rogue-core-static STATIC $<TARGET_OBJECTS:rogue-core> "")
+    set_target_properties(rogue-core-static PROPERTIES OUTPUT_NAME librogue-core)
+    set_target_properties(rogue-core-static PROPERTIES PREFIX "" SUFFIX ".a")
+    set_target_properties(rogue-core-static PROPERTIES VERSION ${ROGUE_VERSION} SOVERSION ${ROGUE_SOVER} )
+    set_target_properties(rogue-core-static PROPERTIES INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so)
+endif()
 
 TARGET_LINK_LIBRARIES(rogue-core-shared PUBLIC ${Boost_LIBRARIES})
 TARGET_LINK_LIBRARIES(rogue-core-shared PUBLIC ${ZeroMQ_LIBRARY})
@@ -408,7 +417,9 @@ if (STATIC_LIB)
    install(TARGETS rogue-core-static LIBRARY DESTINATION ${ROGUE_DIR}/lib ARCHIVE DESTINATION ${ROGUE_DIR}/lib)
 endif()
 
+if (SHARED_LIB)
 install(TARGETS rogue-core-shared LIBRARY DESTINATION ${ROGUE_DIR}/lib ARCHIVE DESTINATION ${ROGUE_DIR}/lib)
+endif()
 
 install(FILES ${PROJECT_BINARY_DIR}/RogueConfig.cmake DESTINATION ${ROGUE_DIR}/lib)
 
@@ -495,7 +506,9 @@ message("-- Found ZeroMq: ${ZeroMQ_INCLUDE_DIR}")
 message("")
 message("-- Found Bzip2: ${BZIP2_INCLUDE_DIR}")
 message("")
-message("-- Link dynamic rogue library!")
+if (SHARED_LIB)
+   message("-- Link dynamic rogue library!")
+endif()
 
 if (STATIC_LIB)
    message("-- Link static rogue library!")
