@@ -301,11 +301,23 @@ if ( NOT STATIC_LIB AND NOT SHARED_LIB )
     set (SHARED_LIB TRUE)
 endif()
 
+# Create LIBS_RPATH
+if (DEFINED ENV{CONDA_PREFIX})
+   SET(LIBS_RPATH $ENV{CONDA_PREFIX}/lib:${ROGUE_DIR}/lib:${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}:${EPICS_BASE_DIR}/lib/${EPICS_ARCH})
+else()
+   SET(LIBS_RPATH ${ROGUE_DIR}/lib:${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}:${EPICS_BASE_DIR}/lib/${EPICS_ARCH})
+endif()
+#set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH ${LIBS_RPATH})
+message("CMAKE_INSTALL_RPATH=${CMAKE_INSTALL_RPATH}")
+message("LIBS_RPATH=${LIBS_RPATH}")
+
 if(SHARED_LIB) 
 add_library(rogue-core-shared SHARED $<TARGET_OBJECTS:rogue-core> "")
 set_target_properties(rogue-core-shared PROPERTIES OUTPUT_NAME librogue-core)
 set_target_properties(rogue-core-shared PROPERTIES PREFIX "" SUFFIX ".so")
 set_target_properties(rogue-core-shared PROPERTIES VERSION ${ROGUE_VERSION} SOVERSION ${ROGUE_SOVER})
+set_target_properties(rogue-core-shared PROPERTIES INSTALL_RPATH ${LIBS_RPATH})
 endif()
 
 if(STATIC_LIB) 
@@ -330,11 +342,6 @@ else()
 endif()
 
 if(STATIC_LIB)
-    add_library(rogue-core-static STATIC $<TARGET_OBJECTS:rogue-core> "")
-    set_target_properties(rogue-core-static PROPERTIES OUTPUT_NAME librogue-core)
-    set_target_properties(rogue-core-static PROPERTIES PREFIX "" SUFFIX ".a")
-    set_target_properties(rogue-core-static PROPERTIES INSTALL_RPATH ${ROGUE_DIR}/lib;${EPICS_PCAS_DIR}/lib/${EPICS_ARCH}/libgdd.so;${EPICS_BASE_DIR}/lib/${EPICS_ARCH}/libCom.so)
-
     # Link rogue core to boost, python and bzip
     TARGET_LINK_LIBRARIES(rogue-core-static PUBLIC ${Boost_LIBRARIES})
     TARGET_LINK_LIBRARIES(rogue-core-static PUBLIC ${ZeroMQ_LIBRARY})
