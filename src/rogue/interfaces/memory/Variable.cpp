@@ -715,6 +715,7 @@ void rim::Variable::setUInt(uint64_t &value, int32_t index) {
 
    (block_->*setUInt_)(value, this, index);
    block_->write(this, index);
+   printf( "setUInt: %s = %lu\n", path_.c_str(), value );
 }
 
 uint64_t rim::Variable::getUInt(int32_t index) {
