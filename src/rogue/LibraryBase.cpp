@@ -273,6 +273,7 @@ std::vector<uint32_t> rogue::LibraryBase::getFieldVectorUInt32(std::map<std::str
 
 
 //! Dump the current state of the registers in the system
+// TODO: Add option to only dump writable variables
 void rogue::LibraryBase::dumpRegisterStatus(std::string filename, bool read) {
    std::map< std::string, rim::VariablePtr>::iterator it;
 
