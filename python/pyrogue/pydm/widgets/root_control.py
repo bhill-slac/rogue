@@ -120,18 +120,18 @@ class RootControl(PyDMFrame):
         hb = QHBoxLayout()
         vb.addLayout(hb)
 
-        self._dumpVarsCmd = PyDMPushButton(label='Dump Vars ',
+        self._dumpCfgVarsCmd = PyDMPushButton(label='DumpCfgVars',
                                             pressValue='',
-                                            init_channel=self._path + '.DumpVars')
+                                            init_channel=self._path + '.DumpCfgVars')
 
-        hb.addWidget(self._dumpVarsCmd)
+        hb.addWidget(self._dumpCfgVarsCmd)
 
-        self._dumpVarsValue = QLineEdit()
-        self._dumpVarsValue.textChanged.connect(self._dumpVarsChanged)
-        hb.addWidget(self._dumpVarsValue)
+        self._dumpCfgVarsValue = QLineEdit()
+        self._dumpCfgVarsValue.textChanged.connect(self._dumpCfgVarsChanged)
+        hb.addWidget(self._dumpCfgVarsValue)
 
         pb = QPushButton('Browse')
-        pb.clicked.connect(self._dumpVarsBrowse)
+        pb.clicked.connect(self._dumpCfgVarsBrowse)
         hb.addWidget(pb)
 
     @Slot(str)
@@ -188,19 +188,19 @@ class RootControl(PyDMFrame):
             self._saveStateValue.setText(stateFile)
 
     @Slot(str)
-    def _dumpVarsChanged(self,value):
-        self._dumpVarsCmd.pressValue = value
+    def _dumpCfgVarsChanged(self,value):
+        self._dumpCfgVarsCmd.pressValue = value
 
     @Slot()
-    def _dumpVarsBrowse(self):
+    def _dumpCfgVarsBrowse(self):
         dlg = QFileDialog()
-        sug = datetime.datetime.now().strftime("dump_%Y%m%d_%H%M%S.yml")
+        sug = datetime.datetime.now().strftime("cfgdump_%Y%m%d_%H%M%S.txt")
 
-        stateFile = dlg.getSaveFileName(caption='Dump Vars file', directory=sug, filter='Dump Files(*.yml);;All Files(*.*)')
+        stateFile = dlg.getSaveFileName(caption='DumpCfgVars file', directory=sug, filter='Dump Files(*.yml);;All Files(*.*)')
 
         # Detect QT5 return
         if isinstance(stateFile,tuple):
             stateFile = stateFile[0]
 
         if stateFile != '':
-            self._dumpVarsValue.setText(stateFile)
+            self._dumpCfgVarsValue.setText(stateFile)
