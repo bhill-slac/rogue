@@ -223,9 +223,10 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
 
         self.add(pr.LocalCommand(name='DumpVars', value='',
                                  function=lambda arg: self.remoteVariableDump(name=arg,
+                                                                    modes=['RW','WO'],
                                                                     readFirst=True),
                                  hidden=True,
-                                 description='Dump remote variables to passed filename in YAML format'))
+                                 description='Save a dump of the writable remote variable state'))
 
         self.add(pr.LocalCommand(name='SaveConfig', value='',
                                  function=lambda arg: self.saveYaml(name=arg,
@@ -898,9 +899,10 @@ class Root(rogue.interfaces.stream.Master,pr.Device):
     def remoteVariableDump(self,name,modes,readFirst):
         """Dump remote variable values to a file."""
 
+        writableOnly = 'RO' not in modes
         # Auto generate name if no arg
         if name is None or name == '':
-            name = datetime.datetime.now().strftime("regdump_%Y%m%d_%H%M%S.txt")
+            name = datetime.datetime.now().strftime(("cfgdump_" if writableOnly else "regdump_")+"%Y%m%d_%H%M%S.txt")
 
         if readFirst:
             self._read()
