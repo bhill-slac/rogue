@@ -173,6 +173,9 @@ void rogue::LibraryBase::createVariable(std::map<std::string, std::string> &data
    // Add to block list
    blockVars[blkName].push_back(var);
    variables_[name]=var;
+
+   // Read each variable as we create them
+   var->read();
 }
 
 //! Helper function to get string from fields
