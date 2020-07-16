@@ -550,11 +550,11 @@ class SystemWidget(QWidget):
                 print(f"Got Exception: {msg}")
 
     @pyqtSlot()
-    def dumpVars(self):
+    def dumpCfgVars(self):
         dlg = QFileDialog()
-        sug = datetime.datetime.now().strftime("dump_%Y%m%d_%H%M%S.yml")
+        sug = datetime.datetime.now().strftime("cfgdump_%Y%m%d_%H%M%S.txt")
 
-        saveFile = dlg.getSaveFileName(caption='Dump Vars file', directory=sug, filter='Config Files(*.yml);;All Files(*.*)')
+        saveFile = dlg.getSaveFileName(caption='DumpCfgVars file', directory=sug, filter='Config Files(*.yml);;All Files(*.*)')
 
         # Detect QT5 return
         if isinstance(saveFile,tuple):
@@ -562,7 +562,7 @@ class SystemWidget(QWidget):
 
         if saveFile != '':
             try:
-                self.root.DumpVars(saveFile)
+                self.root.DumpCfgVars(saveFile)
             except Exception as msg:
                 print(f"Got Exception: {msg}")
 
