@@ -62,6 +62,9 @@ namespace rogue {
          // Parse memory map
          void parseMemMap (std::string map);
 
+         // Read all variables
+         void readAll ();
+
          static std::shared_ptr<rogue::LibraryBase> create();
 
          //! Get variable by name
