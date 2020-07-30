@@ -614,7 +614,7 @@ void rim::Variable::setUInt(uint64_t &value) {
 
    (block_->*setUInt_)(value,this);
    block_->write(this);
-   //printf( "setUInt: %s = %lu\n", path_.c_str(), value );
+   printf( "setUInt: %s = %lu\n", path_.c_str(), value );
 }
 
 #if ! INLINE_SETVALUE_UINT
