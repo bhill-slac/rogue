@@ -60,7 +60,7 @@ rpb::InverterV1::~InverterV1() {}
 
 //! Accept a frame from master
 void rpb::InverterV1::acceptFrame ( ris::FramePtr frame ) {
-   rpb::CoreV1   core;
+   rpb::CoreV1   core;	// Creates and destructs logger on each frame
    rpb::DataPtr  data;
    uint32_t x;
 
