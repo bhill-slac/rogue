@@ -60,7 +60,7 @@ rpb::SplitterV1::~SplitterV1() {}
 
 //! Accept a frame from master
 void rpb::SplitterV1::acceptFrame ( ris::FramePtr frame ) {
-   rpb::CoreV1   core;
+   rpb::CoreV1   core;	// Creates and destructs logger on each frame
    ris::FramePtr nFrame;
    rpb::DataPtr  data;
    uint32_t x;
