@@ -737,6 +737,7 @@ void rim::Variable::setInt(int64_t &value, int32_t index) {
 
    (block_->*setInt_)(value, this, index);
    block_->write(this, index);
+   printf( "setInt: %s = %ld\n", path_.c_str(), value );
 }
 
 int64_t rim::Variable::getInt(int32_t index) {
@@ -757,6 +758,7 @@ void rim::Variable::setBool(bool &value, int32_t index) {
 
    (block_->*setBool_)(value, this, index);
    block_->write(this, index);
+   printf( "setBool: %s = %d\n", path_.c_str(), value );
 }
 
 bool rim::Variable::getBool(int32_t index) {
