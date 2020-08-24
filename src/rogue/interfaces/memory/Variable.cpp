@@ -511,6 +511,30 @@ rim::VariableWrap::VariableWrap ( std::string name,
 void rim::VariableWrap::set(bp::object &value, int32_t index) {
    if ( setFuncPy_ == NULL || block_->blockPyTrans() ) return;
    (block_->*setFuncPy_)(value,this,index);
+   uint64_t u64Value;
+   int64_t  i64Value;
+   bool     bValue;
+   switch ( modelId() )
+   {
+   default:
+        printf( "setValue: %s\n", path_.c_str() );
+        break;
+   case rim::Bool:
+        //bValue = bp::extract<bool>( value.attr("value") );
+        bValue = bp::extract<bool>( value );
+        printf( "setBool: %s = %d\n", path_.c_str(), bValue );
+        break;
+   case rim::Int:
+        //i64Value = bp::extract<int64_t>( value.attr("value") );
+        i64Value = bp::extract<int64_t>( value );
+        printf( "setInt: %s = %ld\n", path_.c_str(), i64Value );
+        break;
+   case rim::UInt:
+        //u64Value = bp::extract<uint64_t>( value.attr("value") );
+        u64Value = bp::extract<uint64_t>( value );
+        printf( "setUInt: %s = %lu\n", path_.c_str(), u64Value );
+        break;
+   }
 }
 
 //! Get value from RemoteVariable
