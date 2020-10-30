@@ -392,10 +392,16 @@ namespace rogue {
                //! Set unsigned int
                void setUInt(uint64_t &, int32_t index=-1);
 
+#define	INLINE_SETVALUE_UINT 0
+#if INLINE_SETVALUE_UINT
                //! Set unsigned int
                void setValue(uint64_t value, int32_t index=-1) {
                   setUInt(value,index);
                }
+#else
+               //! Set unsigned int
+               void setValue(uint64_t value, int32_t index=-1);
+#endif
 
                //! Get unsigned int
                uint64_t getUInt(int32_t index=-1);

@@ -743,6 +743,13 @@ void rim::Variable::setUInt(uint64_t &value, int32_t index) {
    printf( "setUInt: %s = %lu\n", path_.c_str(), value );
 }
 
+#if ! INLINE_SETVALUE_UINT
+void rim::Variable::setValue(uint64_t value) {
+	setUInt(value);
+	//printf( "setValue: %s = %lu\n", path_.c_str(), value );
+}
+#endif
+
 uint64_t rim::Variable::getUInt(int32_t index) {
    if ( getUInt_ == NULL )
       throw(rogue::GeneralError::create("Variable::getUInt", "Wrong get type for variable %s",path_.c_str()));

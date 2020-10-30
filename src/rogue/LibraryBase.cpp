@@ -184,6 +184,7 @@ void rogue::LibraryBase::createVariable(std::map<std::string, std::string> &data
 void rogue::LibraryBase::readAll() {
    std::map< std::string, rim::VariablePtr>::iterator it;
    for (it=variables_.begin(); it != variables_.end(); ++it) {
+      // Read each variable as we create them
       it->second->read();
    }
 }
