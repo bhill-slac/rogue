@@ -1,0 +1,15 @@
+# rogue is built w/ cmake
+# To bootstart from fresh checkout
+source pcds_setup.sh
+mkdir build
+cd build
+
+# For EPICS build
+#cmake .. -DROGUE_INSTALL=local -DEPICS_PCAS_ROOT=/reg/g/pcds/epics/R7.0.2-2.0/modules/pcas/latest
+
+# or for no EPICS
+# For stepping through code via gdb, add -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DROGUE_INSTALL=local -DNO_EPICS=TRUE -DNO_PYTHON=TRUE -DSTATIC_LIB=TRUE -DSHARED_LIB=TRUE
+
+make
+make install
